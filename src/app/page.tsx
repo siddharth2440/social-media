@@ -10,12 +10,12 @@ const Homepage = () => {
 
       {/* left  */}
 
-      <div className="hidden xl:flex border w-[25%]">
-        <Leftmenu/>
+      <div className="hidden xl:flex w-[30%]">
+        <Leftmenu type={"home"}/>
       </div>
 
       {/* center  */}
-      <div className="w-full md:w-[70%] border">
+      <div className="w-full md:w-[40%]">
         <div>
           <Stories/>
           <Addpost/>
@@ -24,7 +24,7 @@ const Homepage = () => {
       </div>
 
       {/* right  */}
-      <div className="hidden md:flex w-[28%] border">
+      <div className="hidden md:flex w-[30%]">
         <Rightmenu/>
       </div>
     </div>
