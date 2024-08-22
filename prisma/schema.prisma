@@ -1,0 +1,116 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// npx init
+// npx prisma db push
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User{
+  id Int @id @default(autoincrement())
+  username String @unique
+  avatar String?
+  cover String?
+  name String?
+  surname String?
+  dscription String?
+  city String?
+  school String?
+  work String?
+  website String?
+  createdAt DateTime @default(now())
+  posts Post[]
+  likes Like[]
+  comments Comment[]
+  followers Follower[] @relation("followerUser")
+  followings Follower[] @relation("followingUser")
+  followRequestsSent FollowRequest[] @relation("FollowRequestsSent")
+  receiveRequestsSent FollowRequest[] @relation("FollowRequestsReceive")
+  blocks Block[] @relation("Blocksent")
+  blockedBy Block[] @relation("Blockreceive")
+  story Story[]
+
+}
+
+model Post{
+  id Int @id @default(autoincrement())
+  desc String
+  img String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
+  userId Int
+  comments Comment[]
+  likes Like[]
+}
+
+model Comment{
+  id Int @id @default(autoincrement())
+  desc String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
+  userId Int
+  post Post @relation(fields: [postId],references: [id],onDelete: Cascade)
+  postId Int
+}
+
+model Like{
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
+  userId Int
+  post Post @relation(fields: [postId],references: [id],onDelete: Cascade)
+  postId Int
+}
+
+model Follower{
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  follower User @relation("followerUser",fields: [followerId],references: [id],onDelete: Cascade)
+  followerId Int
+  following User @relation( "followingUser" ,fields: [followingId],references: [id],onDelete: Cascade)
+  followingId Int
+}
+
+model FollowRequest{
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  sender User @relation("FollowRequestsSent",fields: [senderId],references: [id])
+  senderId Int
+  receiver User @relation("FollowRequestsReceive",fields: [receiverId],references: [id])
+  receiverId Int
+
+  @@unique([senderId,receiverId])
+}
+
+model Block{
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  blocker User @relation("Blocksent",fields: [blockerId],references: [id],onDelete: Cascade)
+  blockerId Int
+  blocked User @relation("Blockreceive",fields: [blockedId],references: [id],onDelete: Cascade)
+  blockedId Int
+
+  @@unique([blockerId,blockedId])
+}
+
+
+model Story{
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  user User @relation(fields: [userId],references: [id])
+  userId Int
+  img String
+}
