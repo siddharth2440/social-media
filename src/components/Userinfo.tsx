@@ -4,7 +4,46 @@ import map from "../../public/map.png"
 import work from "../../public/work.png"
 import school from "../../public/school.png"
 import link from "../../public/link.png"
-const Userinfo = () => {
+import { User } from '@prisma/client'
+import { auth } from '@clerk/nextjs/server'
+import prisma from '@/lib/client'
+const Userinfo = async ({user}:{user:User}) => {
+
+    // console.log(user);
+    const createdAtDate = new Date(user?.createdAt);
+    const formattedDate = createdAtDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    // console.log(formattedDate);
+   
+    let isFollowing:boolean = false;
+    let isFollowingRequestSent:boolean = false;
+    let isUserBlocked:boolean = false;
+
+    const { userId:curUserId } = auth();
+    if(curUserId){
+        const blockResponse = await prisma.block.findFirst({
+            where: {
+                blockedId:user.id,
+                blockerId:curUserId
+            }
+        })
+        blockResponse ? isUserBlocked = true : isUserBlocked = false
+
+        const followRes = await prisma.follower.findFirst({
+            where: {
+                followerId:curUserId,
+                followingId:user.id
+            }
+        })
+        followRes ? isFollowing = true : isFollowing = false
+
+        const followRequest = await prisma.followRequest.findFirst({
+            where: {
+                senderId:curUserId,
+                receiverId:user.id
+            }
+        })
+        followRequest ? isFollowingRequestSent = true : isFollowingRequestSent = false
+    }
   return (
     <div className='flex bg-slate-100 items-start justify-start flex-col gap-1 m-auto w-[90%] py-2 px-1 shadow-xl rounded-md'>
         
@@ -17,15 +56,15 @@ const Userinfo = () => {
 
         {/* user info  */}
         <div className='flex items-center justify-start gap-2'>
-            <h2 className='text-[0.8rem]'>Elva Weaver</h2>
+            <h2 className='text-[0.8rem]'>{user?.name}</h2>
             <div className="tag text-[0.6rem]">@lamadev</div>
         </div>
 
-        <p className='text-[0.8rem] text-gray-700 py-1'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta, amet?</p>
+        <p className='text-[0.8rem] text-gray-700 py-1'>{ user?.dscription ||"No Information"}</p>
 
         <div className='flex mt-1 items-center justify-start gap-2'>
             <Image src={map} alt='map-logo' height={18} width={18}/>
-            <span className='text-[0.8rem]'>Living in <span className='text-[0.6rem] font-[600] text-gray-600'> Denver </span> </span>
+            <span className='text-[0.8rem]'>Living in { user && (<span className='text-[0.6rem] font-[600] text-gray-600'> { user.city} </span>)} </span>
         </div>
 
         <div className='flex mt-1 items-center justify-start gap-2'>
@@ -41,9 +80,9 @@ const Userinfo = () => {
         <div className='flex mt-1 items-center justify-between gap-2 w-[100%]'>
             <div className='flex items-center justify-start gap-1'>
                 <Image src={link} alt='map-logo' height={14} width={14}/>
-                <span className='text-[0.8rem] opacity-70 font-[500]'>lama.dev</span>
+                { user && (<span className='text-[0.8rem] opacity-70 font-[500]'> {user.website}</span>)}
             </div>
-            <span className='text-[0.8rem]'>Joined<span className='text-[0.6rem] font-[600] text-gray-600 pl-1'>November 2024 </span> </span>
+            <span className='text-[0.8rem]'>Joined<span className='text-[0.6rem] font-[600] text-gray-600 pl-1'>{formattedDate} </span> </span>
         </div>
         <button className='w-[100%] bg-[#3D81F8] rounded-md text-white my-2'>
             Follow User

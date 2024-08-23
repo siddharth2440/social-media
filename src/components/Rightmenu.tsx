@@ -1,18 +1,23 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import FriendRequests from './FriendRequests'
 import Birthdays from './Birthdays'
 import Ad from './Ad'
 import Userinfo from './Userinfo'
 import Usermedia from './Usermedia'
+import { User } from '@prisma/client'
 
-const Rightmenu = ( {userId} : {userId?:string} ) => {
+const Rightmenu = ( {user} : {user?:User} ) => {
   return (
     <div className='flex items-center justify-start flex-col w-[100%] gap-5'>
       {
-        userId ? (
+        user ? (
         <>
-          <Userinfo/>
-          <Usermedia/>
+          <Suspense fallback={"Loading..."}>
+            <Userinfo user={user}/>
+          </Suspense>
+          <Suspense fallback={"Loading..."}>
+            <Usermedia/>
+          </Suspense>
         </>
       ) : ""
       }
