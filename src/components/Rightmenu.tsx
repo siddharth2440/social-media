@@ -5,8 +5,28 @@ import Ad from './Ad'
 import Userinfo from './Userinfo'
 import Usermedia from './Usermedia'
 import { User } from '@prisma/client'
+type countType = {
+  followers: number;
+  followings: number;
+  posts: number;
+}
 
-const Rightmenu = ( {user} : {user?:User} ) => {
+type userType = {
+  id: string;
+  username: string;
+  avatar?: string;
+  cover?: string;
+  name?: string;
+  surname?: string;
+  dscription?: string ,
+  city?: string,
+  school?:  string,
+  work?: null;
+  website?: string;
+  createdAt: any,
+  _count?: countType
+}
+const Rightmenu = ( {user} : {user?:userType} ) => {
   return (
     <div className='flex items-center justify-start flex-col w-[100%] gap-5'>
       {
@@ -16,7 +36,7 @@ const Rightmenu = ( {user} : {user?:User} ) => {
             <Userinfo user={user}/>
           </Suspense>
           <Suspense fallback={"Loading..."}>
-            <Usermedia/>
+            <Usermedia user={user}/>
           </Suspense>
         </>
       ) : ""

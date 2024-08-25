@@ -1,7 +1,46 @@
+import prisma from '@/lib/client';
 import Image from 'next/image'
 import React from 'react'
 
-const Usermedia = () => {
+type countType = {
+  followers: number;
+  followings: number;
+  posts: number;
+}
+
+type userType = {
+  id: string;
+  username: string;
+  avatar?: string;
+  cover?: string;
+  name?: string;
+  surname?: string;
+  dscription?: string ,
+  city?: string,
+  school?:  string,
+  work?: null;
+  website?: string;
+  createdAt: any,
+  _count?: countType
+}
+
+const Usermedia = async ({user}:{user:userType}) => {
+  // console.log("Usermedia");
+  // console.log(user);
+
+  const posts_with_media = await prisma.post.findMany({
+    where: {
+      userId: user.id,
+      img:{
+        not: null
+      }
+    },
+    take:8,
+    // skip:1
+    orderBy:{
+      createdAt: 'desc'
+    }
+  })
   return (
     <div className='flex bg-slate-100 items-start justify-start flex-col gap-3 m-auto w-[90%] py-2 px-1 shadow-xl rounded-md'>
         
@@ -12,16 +51,16 @@ const Usermedia = () => {
         </div>
 
         <div className='flex items-center justify-start px-2 flex-wrap gap-2'>
-        <Image src="https://images.pexels.com/photos/2119714/pexels-photo-2119714.jpeg?auto=compress&cs=tinysrgb&w=600" alt="image" height={30} width={30} className='object-cover h-[5rem] rounded-lg w-auto'/ >
-        <Image src="https://images.pexels.com/photos/2119714/pexels-photo-2119714.jpeg?auto=compress&cs=tinysrgb&w=600" alt="image" height={30} width={30} className='object-cover h-[5rem] rounded-lg w-auto'/ >
-        <Image src="https://images.pexels.com/photos/2119714/pexels-photo-2119714.jpeg?auto=compress&cs=tinysrgb&w=600" alt="image" height={30} width={30} className='object-cover h-[5rem] rounded-lg w-auto'/ >
-        <Image src="https://images.pexels.com/photos/2119714/pexels-photo-2119714.jpeg?auto=compress&cs=tinysrgb&w=600" alt="image" height={30} width={30} className='object-cover h-[5rem] rounded-lg w-auto'/ >
-        <Image src="https://images.pexels.com/photos/2119714/pexels-photo-2119714.jpeg?auto=compress&cs=tinysrgb&w=600" alt="image" height={30} width={30} className='object-cover h-[5rem] rounded-lg w-auto'/ >
-        <Image src="https://images.pexels.com/photos/2119714/pexels-photo-2119714.jpeg?auto=compress&cs=tinysrgb&w=600" alt="image" height={30} width={30} className='object-cover h-[5rem] rounded-lg w-auto'/ >
-        <Image src="https://images.pexels.com/photos/2119714/pexels-photo-2119714.jpeg?auto=compress&cs=tinysrgb&w=600" alt="image" height={30} width={30} className='object-cover h-[5rem] rounded-lg w-auto'/ >
-        <Image src="https://images.pexels.com/photos/2119714/pexels-photo-2119714.jpeg?auto=compress&cs=tinysrgb&w=600" alt="image" height={30} width={30} className='object-cover h-[5rem] rounded-lg w-auto'/ >
-        <Image src="https://images.pexels.com/photos/2119714/pexels-photo-2119714.jpeg?auto=compress&cs=tinysrgb&w=600" alt="image" height={30} width={30} className='object-cover h-[5rem] rounded-lg w-auto'/ >
-        <Image src="https://images.pexels.com/photos/2119714/pexels-photo-2119714.jpeg?auto=compress&cs=tinysrgb&w=600" alt="image" height={30} width={30} className='object-cover h-[5rem] rounded-lg w-auto'/ >
+        <>
+          {
+            posts_with_media.length>0 ? posts_with_media.map((val,idx) => {
+              return (
+                  <Image src={val.img!} key={idx+1} alt="post-img" width={150} height={150} className='object-cover'/>
+              )
+              }) : ( <h1 className='w-[100%] m-auto'>No media Found</h1>
+            )
+          } 
+        </>
         </div>
     </div>
   )

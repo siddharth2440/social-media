@@ -8,7 +8,28 @@ import { User } from '@prisma/client'
 import { auth } from '@clerk/nextjs/server'
 import prisma from '@/lib/client'
 import UserInfoCardIntteraction from './UserInfoCardIntteraction'
-const Userinfo = async ({user}:{user:User}) => {
+type countType = {
+    followers: number;
+    followings: number;
+    posts: number;
+  }
+  
+  type userType = {
+    id: string;
+    username: string;
+    avatar?: string;
+    cover?: string;
+    name?: string;
+    surname?: string;
+    dscription?: string ,
+    city?: string,
+    school?:  string,
+    work?: null;
+    website?: string;
+    createdAt: any,
+    _count?: countType
+  }
+const Userinfo = async ({user}:{user:userType}) => {
 
     // console.log(user);
     const createdAtDate = new Date(user?.createdAt);
