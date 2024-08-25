@@ -7,6 +7,7 @@ import link from "../../public/link.png"
 import { User } from '@prisma/client'
 import { auth } from '@clerk/nextjs/server'
 import prisma from '@/lib/client'
+import UserInfoCardIntteraction from './UserInfoCardIntteraction'
 const Userinfo = async ({user}:{user:User}) => {
 
     // console.log(user);
@@ -84,10 +85,7 @@ const Userinfo = async ({user}:{user:User}) => {
             </div>
             <span className='text-[0.8rem]'>Joined<span className='text-[0.6rem] font-[600] text-gray-600 pl-1'>{formattedDate} </span> </span>
         </div>
-        <button className='w-[100%] bg-[#3D81F8] rounded-md text-white my-2'>
-            Follow User
-        </button>
-        <button className='text-[0.8rem] text-red-700 self-end'> Block User </button>
+        <UserInfoCardIntteraction currUserId={curUserId} isFollowing={isFollowing} isFollowingRequestSent={isFollowingRequestSent} isUserBlocked={isUserBlocked} userId={user.id}/>
     </div>
   )
 }

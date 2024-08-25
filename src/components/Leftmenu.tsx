@@ -14,11 +14,14 @@ import courses from "../../public/courses.png"
 import lists from "../../public/lists.png"
 import settings from "../../public/settings.png"
 
+// typeof type = "home" | "profile"
+
 const Leftmenu = ({type}:{type:"home" | "profile"}) => {
+  // console.log(type);
   return (
     <div className='w-[90%] flex items-start justify-start flex-col gap-3 m-auto'>
       {
-        type == "profile" && <Profilecard/>
+        type === "profile" && <Profilecard/>
       }
       <div className='p-4 bg-white rounded-lg shadow-md text-sm text-gray-500 flex flex-col gap-2 w-[100%]'>
 

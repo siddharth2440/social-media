@@ -93,7 +93,7 @@ model FollowRequest {
   @@unique([senderId, receiverId])
 }
 
-model Block {
+model Block {-+
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   blocker   User     @relation("Blocksent", fields: [blockerId], references: [id], onDelete: Cascade)
