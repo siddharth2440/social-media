@@ -78,6 +78,65 @@ export const switchBlock = async (userId:string) => {
         })
 
     } catch (error) {
+        console.log(error);
         
+    }
+}
+
+
+export const accept_follow_request = async (userId:string) => {
+    const {userId:curUserID} = auth();
+    if(!curUserID){
+        throw new Error("User is not authenticated");
+    }
+    try {
+        const existing_follow_reuest = await prisma.followRequest.findFirst({
+            where:{
+                senderId: userId,
+                receiverId: curUserID
+            }
+        })
+        if(existing_follow_reuest){
+            await prisma.followRequest.delete({
+                where:{
+                    id: existing_follow_reuest.id
+                }
+            })
+        }
+    
+        await prisma.follower.create({
+            data:{
+                followerId: userId,
+                followingId: curUserID
+            }
+        })
+    } catch (error) {
+        console.log(error);
+        throw new Error(JSON.stringify(error));
+    }
+}
+
+export const decline_follow_request = async (userId:string) => {
+    const {userId:curUserID} = auth();
+    if(!curUserID){
+        throw new Error("User is not authenticated");
+    }
+    try {
+        const existing_follow_reuest = await prisma.followRequest.findFirst({
+            where:{
+                senderId: userId,
+                receiverId: curUserID
+            }
+        })
+        if(existing_follow_reuest){
+            await prisma.followRequest.delete({
+                where:{
+                    id: existing_follow_reuest.id
+                }
+            })
+        }
+    } catch (error) {
+        console.log(error);
+        throw new Error(JSON.stringify(error));
     }
 }

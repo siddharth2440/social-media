@@ -9,9 +9,32 @@ import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import React from 'react'
 
+
+
+type countType = {
+  followers: number;
+  followings: number;
+  posts: number;
+}
+
+type userType = {
+  id: string;
+  username: string;
+  avatar?: string;
+  cover?: string;
+  name?: string;
+  surname?: string;
+  dscription?: string ,
+  city?: string,
+  school?:  string,
+  work?: null;
+  website?: string;
+  createdAt?: any,
+  _count?: countType
+}
 const Page = async ({params}:{params:{id:string}}) => {
   
-  const user = await prisma.user.findFirst({
+  const user:userType = await prisma.user.findFirst({
     where:{
       id:params?.id
     },

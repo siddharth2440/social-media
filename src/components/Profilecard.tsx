@@ -4,7 +4,7 @@ import Image from 'next/image'
 import React, { Suspense } from 'react'
 
 const Profilecard = async () => {
-  const { userId } = auth();  
+  const { userId } = auth(); 
   if(!userId) return null;
   const user = await prisma.user.findFirst({
     where: { 
@@ -24,7 +24,7 @@ const Profilecard = async () => {
     }
   })
 
-  console.log(user);
+  // console.log(user);
   return (
     <div className='w-[100%] px-2 flex flex-col justify-start items-start gap-1 bg-white shadow-xl rounded-md py-2'>
       <h1>User Info...</h1>

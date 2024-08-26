@@ -8,6 +8,9 @@ import { User } from '@prisma/client'
 import { auth } from '@clerk/nextjs/server'
 import prisma from '@/lib/client'
 import UserInfoCardIntteraction from './UserInfoCardIntteraction'
+import UpdateUser from './UpdateUser'
+import Link from 'next/link'
+
 type countType = {
     followers: number;
     followings: number;
@@ -73,7 +76,13 @@ const Userinfo = async ({user}:{user:userType}) => {
 
         <div className='w-[100%] flex items-center justify-between'>
             <h4 className='text-[1.2rem] font-[500] opacity-90 text-gray-700'>User information</h4>
-            <span className='text-[0.8rem] text-blue-500'>See all</span>
+            <span className='text-[0.8rem] text-blue-500'>
+                {
+                    curUserId == user.id ? (<UpdateUser/>) : (
+                        <Link href={"/"}> See all </Link>
+                    )
+                }
+            </span>
         </div>
 
         {/* user info  */}
@@ -106,7 +115,9 @@ const Userinfo = async ({user}:{user:userType}) => {
             </div>
             <span className='text-[0.8rem]'>Joined<span className='text-[0.6rem] font-[600] text-gray-600 pl-1'>{formattedDate} </span> </span>
         </div>
-        <UserInfoCardIntteraction currUserId={curUserId} isFollowing={isFollowing} isFollowingRequestSent={isFollowingRequestSent} isUserBlocked={isUserBlocked} userId={user.id}/>
+        {   curUserId != user.id &&
+            (<UserInfoCardIntteraction currUserId={curUserId} isFollowing={isFollowing} isFollowingRequestSent={isFollowingRequestSent} isUserBlocked={isUserBlocked} userId={user.id}/>)
+        }
     </div>
   )
 }
