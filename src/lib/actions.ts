@@ -2,6 +2,8 @@
 
 import { auth } from "@clerk/nextjs/server"
 import prisma from "./client";
+import { z } from "zod";
+import { revalidatePath } from "next/cache";
 
 export const switchFollow = async (userId:string) => {    
     const { userId:currUserId } = auth();
@@ -139,4 +141,53 @@ export const decline_follow_request = async (userId:string) => {
         console.log(error);
         throw new Error(JSON.stringify(error));
     }
+}
+
+export const update_user_profile = async (prevState:{error:boolean; success:boolean},formdata:FormData) => {
+    
+    const {userId}  = auth()
+
+    if(!userId){
+    return {error:false,success:true}
+    }
+    const get_all_details = Object.fromEntries(formdata);
+    const filtered_fields = Object.fromEntries(
+        Object.entries(get_all_details).filter(([_, value]) => value != "")
+    )
+    console.log(filtered_fields);
+    
+    const profile = z.object({
+        name: z.string().min(3).optional(),
+        surname: z.string().min(3).optional(),
+        dscription: z.string().min(5).max(60).optional(),
+        city: z.string().min(5).optional(),
+        school: z.string().min(5).optional(),
+        work: z.string().optional(),
+        website: z.string().min(5).optional(),
+    })
+    const validated_fields = profile.safeParse(filtered_fields)
+    console.log(validated_fields);
+    
+    if(!validated_fields.success){
+        return {error:false,success:true}
+    }
+
+    try {
+        console.log("Updating the user profile");
+        
+        await prisma.user.update({
+            where:{
+                id:userId ?? ""
+            },
+            data:validated_fields.data ?? ""
+        })
+    } catch (error) {
+        console.log("Error in updating the user");
+        
+        
+        return {error:false,success:true}
+    }
+    // console.log("User updated successfully");
+    revalidatePath(`/`)
+    return {error:false,success:true}
 }

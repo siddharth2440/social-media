@@ -17,7 +17,7 @@ type countType = {
     posts: number;
   }
   
-  type userType = {
+type userType = {
     id: string;
     username: string;
     avatar?: string;
@@ -78,7 +78,7 @@ const Userinfo = async ({user}:{user:userType}) => {
             <h4 className='text-[1.2rem] font-[500] opacity-90 text-gray-700'>User information</h4>
             <span className='text-[0.8rem] text-blue-500'>
                 {
-                    curUserId == user.id ? (<UpdateUser/>) : (
+                    curUserId == user.id ? (<UpdateUser user={user}/>) : (
                         <Link href={"/"}> See all </Link>
                     )
                 }
