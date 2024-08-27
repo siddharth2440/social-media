@@ -32,7 +32,7 @@ const Profilecard = async () => {
         { user ? (
           <>
           <div className='relative w-[90%] m-auto'>
-            <Image src={"https://images.pexels.com/photos/772177/pexels-photo-772177.jpeg?auto=compress&cs=tinysrgb&w=600"} alt='user-image' height={30} width={30} className='h-[6rem] w-auto m-auto rounded-md'/>
+            <Image src={ user?.cover || "https://images.pexels.com/photos/772177/pexels-photo-772177.jpeg?auto=compress&cs=tinysrgb&w=600"} alt='user-image' height={30} width={30} className='h-[6rem] w-auto m-auto rounded-md'/>
             <Image src={ user?.avatar || "https://images.pexels.com/photos/772177/pexels-photo-772177.jpeg?auto=compress&cs=tinysrgb&w=600"} alt='user-image' height={30} width={30} className='h-[1.5rem] absolute bottom-[-10%] rounded-full left-[40%] w-auto m-auto '/>
         </div>
         <h1 className='opacity-80 self-center text-[0.9rem] font-[600] mt-2'>{user?.name}</h1>

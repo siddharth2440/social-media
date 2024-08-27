@@ -143,18 +143,22 @@ export const decline_follow_request = async (userId:string) => {
     }
 }
 
-export const update_user_profile = async (prevState:{error:boolean; success:boolean},formdata:FormData) => {
+export const update_user_profile = async (prevState:{error:boolean; success:boolean},payload:{formdata:FormData,cover:string}) => {
     
     const {userId}  = auth()
 
     if(!userId){
     return {error:false,success:true}
     }
+    
+    const {formdata,cover} = payload;
+    // console.log("Cover :-  "+cover);
+
     const get_all_details = Object.fromEntries(formdata);
     const filtered_fields = Object.fromEntries(
         Object.entries(get_all_details).filter(([_, value]) => value != "")
     )
-    console.log(filtered_fields);
+    // console.log(filtered_fields);
     
     const profile = z.object({
         name: z.string().min(3).optional(),
@@ -164,8 +168,9 @@ export const update_user_profile = async (prevState:{error:boolean; success:bool
         school: z.string().min(5).optional(),
         work: z.string().optional(),
         website: z.string().min(5).optional(),
+        cover:z.string().min(5).optional()
     })
-    const validated_fields = profile.safeParse(filtered_fields)
+    const validated_fields = profile.safeParse({cover,...filtered_fields})
     console.log(validated_fields);
     
     if(!validated_fields.success){

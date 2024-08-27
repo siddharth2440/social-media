@@ -2,3 +2,8 @@ NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY   =   <YOUR CLERK PUBLISHABLE KEY>
 CLERK_SECRET_KEY   =   <YOUR_CLERK_SECRET_KEY>
 WEBHOOK_SECRET  = <YOUR_WEBHOOK_SECRET>
 DATABASE_URL =  <your_db_connection_string>  "mysql://<user>:<password>@<localhost:PORT>/<database_name>"
+
+
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME = <your-cloudinary-cloud-name>
+NEXT_PUBLIC_CLOUDINARY_API_KEY = <your-cloudinary-api-key>
+CLOUDINARY_API_SECRET = <your-cloudinary-api-secret>
