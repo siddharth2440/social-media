@@ -17,7 +17,7 @@ type countType = {
   posts: number;
 }
 
-type userType = {
+type type_user = {
   id: string;
   username: string;
   avatar?: string;
@@ -27,14 +27,14 @@ type userType = {
   dscription?: string ,
   city?: string,
   school?:  string,
-  work?: null;
+  work?: string;
   website?: string;
-  createdAt?: any,
-  _count?: countType
+  createdAt: Date,
+  _count: countType
 }
 const Page = async ({params}:{params:{id:string}}) => {
   
-  const user:userType = await prisma.user.findFirst({
+  const user : type_user = await prisma?.user?.findFirst({
     where:{
       id:params?.id
     },
@@ -92,7 +92,7 @@ const Page = async ({params}:{params:{id:string}}) => {
               </div>
 
           </div>
-          <Feed/>
+          <Feed username={user.username}/>
         </div>
       </div>
 

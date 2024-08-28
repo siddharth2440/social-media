@@ -17,7 +17,7 @@ type countType = {
     posts: number;
   }
   
-type userType = {
+  type type_user = {
     id: string;
     username: string;
     avatar?: string;
@@ -27,12 +27,12 @@ type userType = {
     dscription?: string ,
     city?: string,
     school?:  string,
-    work?: null;
+    work?: string;
     website?: string;
-    createdAt: any,
-    _count?: countType
+    createdAt: Date,
+    _count: countType
   }
-const Userinfo = async ({user}:{user:userType}) => {
+const Userinfo = async ({user}:{user:type_user}) => {
 
     // console.log(user);
     const createdAtDate = new Date(user?.createdAt);

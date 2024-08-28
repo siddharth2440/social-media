@@ -5,13 +5,14 @@ import Ad from './Ad'
 import Userinfo from './Userinfo'
 import Usermedia from './Usermedia'
 import { User } from '@prisma/client'
+
 type countType = {
   followers: number;
   followings: number;
   posts: number;
 }
 
-type userType = {
+type type_user = {
   id: string;
   username: string;
   avatar?: string;
@@ -21,12 +22,13 @@ type userType = {
   dscription?: string ,
   city?: string,
   school?:  string,
-  work?: null;
+  work?: string;
   website?: string;
-  createdAt: any,
-  _count?: countType
+  createdAt: Date,
+  _count: countType
 }
-const Rightmenu = ( {user} : {user?:userType} ) => {
+
+const Rightmenu = ( {user} : {user?:type_user} ) => {
   return (
     <div className='flex items-center justify-start flex-col w-[100%] gap-5'>
       {

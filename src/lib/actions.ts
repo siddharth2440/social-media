@@ -196,3 +196,42 @@ export const update_user_profile = async (prevState:{error:boolean; success:bool
     revalidatePath(`/`)
     return {error:false,success:true}
 }
+
+export const switchLike = async (postId:number) => {
+    const {userId} = auth();
+    if(!userId) throw new Error("User not found");
+
+    // console.log("POO" + postId);
+    const all_likes = await prisma.like.findMany({});
+    // console.log(all_likes);
+    
+    try {
+        const isLiked = await prisma.like.findFirst({
+            where:{
+                userId,postId
+            }
+        })
+        if(isLiked){
+            // console.log(isLiked);
+            console.log("Log is goinf"+isLiked.id);
+            
+            await prisma.like.delete({
+                where:{
+                    id: isLiked.id
+                }
+            })
+
+            return {success:true,message:"Post deleted Successully"}
+        }
+        await prisma.like.create({
+            data:{
+                userId,
+                postId
+            }
+        })
+        // console.log("Saved to the databse");
+        return {success:true,msg:"liked Successfully"}
+    } catch (error) {
+        return {success:true,message:"Post deleted Successully"}
+    }
+}

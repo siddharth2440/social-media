@@ -10,7 +10,7 @@ type countType = {
   posts: number;
 }
 
-type userType = {
+type type_user = {
   id: string;
   username: string;
   avatar?: string;
@@ -20,12 +20,12 @@ type userType = {
   dscription?: string ,
   city?: string,
   school?:  string,
-  work?: null;
+  work?: string;
   website?: string;
-  createdAt: any,
-  _count?: countType
+  createdAt: Date,
+  _count: countType
 }
-const UpdateUser = ({user}:{user:userType}) => {
+const UpdateUser = ({user}:{user:type_user}) => {
   const [ open_update_card,set_openingOrclosing_of_card ] = useState(false)
   const [ state,formAction ] =  useActionState(update_user_profile,{error:false,success:false})
 
