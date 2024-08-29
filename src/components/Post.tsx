@@ -57,7 +57,7 @@ const Post = ({post}:{post:FeedType}) => {
         </div>
 
         {/* comments */}
-        <Comments/>
+        <Comments postId={post.id}/>
 
     </div>
   )

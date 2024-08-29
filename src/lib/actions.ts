@@ -235,3 +235,18 @@ export const switchLike = async (postId:number) => {
         return {success:true,message:"Post deleted Successully"}
     }
 }
+
+export const addComment = async (prevState:{success:boolean,error:boolean},payload:{desc:string,postId:number}) =>{
+    const { userId } = auth();
+    const { desc,postId } = payload;
+    try {
+        await prisma.comment.create({
+            data:{
+                postId,desc,userId:userId ?? ""
+            }
+        })
+    } catch (error) {
+        return {success:false,error:true}
+    }
+    return {success:true,error:false}
+}
