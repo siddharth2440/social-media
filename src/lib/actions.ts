@@ -250,3 +250,29 @@ export const addComment = async (prevState:{success:boolean,error:boolean},paylo
     }
     return {success:true,error:false}
 }
+
+
+
+export const addNewPost = async (formData:FormData,img:string) => {
+    const {userId} = auth();
+    if(!userId) throw new Error("User not found");
+
+    const {desc} = Object.fromEntries(formData);
+    const DESC = z.object({
+        desc: z.string().min(4).max(200).optional()
+    })
+
+    const validate_fields = DESC.safeParse({desc,img,userId});
+    if(!validate_fields) return {success: false}
+    console.log(validate_fields);
+    
+    await prisma.post.create({
+        data:{
+            userId,
+            desc:validate_fields.data?.desc || "",
+            img
+        }
+    })
+    revalidatePath("/");
+    return {success:true}
+}
