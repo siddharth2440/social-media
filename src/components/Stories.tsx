@@ -1,8 +1,37 @@
 import Image from 'next/image'
 import React from 'react'
 import noAvatar from "../../public/noAvatar.png"
+import prisma from '@/lib/client'
+import { auth } from '@clerk/nextjs/server'
 
-const Stories = () => {
+const Stories = async () => {
+    const { userId:currUserId } = await auth();
+
+    const stories = await prisma.story.findMany({
+        where:{
+            expiresAt:{
+                gte: new Date()
+            },
+            OR:[
+                {
+                    user:{
+                        followers:{
+                            some:{
+                                followerId  : currUserId ?? ""
+                            }
+                        }
+                    }
+                },
+                {
+                    userId : currUserId ?? ""
+                }
+            ]
+        },
+        include:{
+            user: true
+        }
+    })
+    
   return (
     <div className='w-[100%] rounded-sm bg-slate-100 shadow-xl px-2 m-auto overflow-scroll scrollbar-hide py-2'>
         
